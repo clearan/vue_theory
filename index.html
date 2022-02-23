@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <h2>{{person.name}} -- {{person.age}}</h2>
+    <h3>{{msg}}</h3>
+    <div v-text="obj.msg"></div>
+    <div v-html="htmlStr"></div>
+    <input type="text" v-model="hobby">
+    <button v-on:click="handleClick">按钮on</button>
+    <button @click="handleClick">按钮@</button>
+    <ul>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+    </ul>
+</div>
+<script src="Observer.js"></script>
+<script src="MVue.js"></script>
+<script>
+    let vm = new MVue({
+        el: "#app",
+        data: {
+            person: {
+                name: '天才',
+                age:18
+            },
+            htmlStr: '<div>我是html</div>',
+            obj: {
+                msg: '天青色等烟雨',
+            },
+            hobby: '篮球',
+            msg : '学习原理'
+        },
+        methods: {
+            handleClick() {
+                this.$data.person.name = 'caiji'
+            }
+        },
+    })
+</script>
+</body>
+</html>

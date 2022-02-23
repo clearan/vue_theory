@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>取消期约</title>
+</head>
+<body>
+<button id="start">Start</button>
+<button id="cancel">Cancel</button>
+<script>
+    class CancelToken {
+        constructor(cancelFn) {
+            console.log(cancelFn)
+            this.promise = new Promise((resolve, reject) => {
+                cancelFn(() => {
+                    setTimeout(console.log, 0, 'delay canceled')
+                    resolve();
+                })
+            })
+        }
+    }
+
+    const startBtn = document.querySelector('#start')
+    const cancelBtn = document.querySelector('#cancel')
+    function cancellabelDelayedResolve(delay) {
+        setTimeout(console.log, 0, 'set delay')
+        return new Promise((resolve, reject) => {
+            console.log(11)
+            const id = setTimeout(() => {
+                setTimeout(console.log,0,'delay resolve')
+                resolve()
+            }, delay)
+            const cancelToken = new CancelToken((cancelCallback) => cancelBtn.addEventListener('click', cancelCallback))
+            cancelToken.promise.then(() => clearTimeout(id))
+        })
+    }
+    startBtn.addEventListener('click', () => cancellabelDelayedResolve(1000))
+</script>
+</body>
+</html>

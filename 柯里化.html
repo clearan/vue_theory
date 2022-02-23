@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>柯里化</title>
+</head>
+<body>
+<script>
+    function add(a, b,c) {
+        return a+b+c
+    }
+    function fix(fn) {
+        const _args = [...arguments].slice(1);
+        return function () {
+            const current = [...arguments].slice(0);
+            const args = [..._args,...current];
+            return fn.apply(this,args)
+        }
+    }
+    // const res = fix(add, 1, 2)
+    // console.log(res(9))
+
+    function curry(fn, length) {
+        const len = length || fn.length;
+        return function () {
+            if (arguments.length < len) {
+                const nowArg = [fn, ...arguments]
+                return curry(fix.apply(this, nowArg), len - arguments.length);
+            } else {
+                return fn.apply(this, [...arguments])
+            }
+        }
+    }
+    const sum = curry(add)
+    const result = sum(1)(2)(5)
+    // console.log(result)
+
+    function Sum() {
+        console.log(arguments)
+        if (arguments.length === 1) {
+            const [x] = [...arguments]
+            return function () {
+                console.log(arguments)
+                const [y] = [...arguments]
+                return x + y
+            }
+        } else {
+            [x,y] = [...arguments]
+            return x+y
+        }
+    }
+    // const m = Sum(1,2)
+    const n = Sum(1)(5)
+    // console.log(m)
+    console.log(n)
+</script>
+</body>
+</html>
