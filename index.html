@@ -8,8 +8,8 @@
 <div id="app">
     <h2>{{person.name}} -- {{person.age}}</h2>
     <h3>{{msg}}</h3>
-    <div v-text="obj.msg"></div>
-    <div v-html="htmlStr"></div>
+<!--    <div v-text="obj.msg"></div>-->
+<!--    <div v-html="htmlStr"></div>-->
     <input type="text" v-model="hobby">
     <button v-on:click="handleClick">按钮on</button>
     <button @click="handleClick">按钮@</button>
@@ -22,6 +22,9 @@
 <script src="Observer.js"></script>
 <script src="MVue.js"></script>
 <script>
+    // 模板预编译的阶段，发现有双向绑定的变量则实例化一个watcher，传入更新dom的render函数作为回调函数，便于下次更新执行更新页面；实例化watcher
+    // 的时候，还做了一件事，读了一遍当前的值（做个记录，为了与下次比较），所以触发了getter，并且在读之前将当前的watcher实例挂载到了Dep的target属性上
+    // 这样就关联起来当前的Dep和当前的watcher实例了，读完就置为null，
     let vm = new MVue({
         el: "#app",
         data: {

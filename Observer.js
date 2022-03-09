@@ -1,5 +1,6 @@
 class Watcher { // 存值： 一个是当前的value值，记录值的时候会触发getter劫持。一个是回调函数
     constructor(vm, expr, cb) {
+        console.log('watch')
         this.vm = vm
         this.expr = expr
         this.cb = cb
@@ -8,7 +9,7 @@ class Watcher { // 存值： 一个是当前的value值，记录值的时候会�
     }
     getOldVal() {
         Dep.target = this
-        const oldVal = compileUtil.getVal(this.expr, this.vm)
+        const oldVal = compileUtil.getVal(this.expr, this.vm) // 读了一下旧值，触发get
         Dep.target = null
         return oldVal
     }
@@ -36,6 +37,7 @@ class Dep{
 }
 class Observer {
     constructor(data) {
+        console.log('开始Observer')
         this.observer(data)
     }
     observer(data) {
@@ -56,9 +58,8 @@ class Observer {
             get() {
                 // 订阅数据变化时，往Dep中添加观察者
                 Dep.target && dep.addSub(Dep.target) // 这一步也很关键重要
-                console.log(dep)
-                // console.log(Dep.target)
-                // console.log('触发读')
+
+                console.log('触发读')
                 return value;
             },
             set:(newVal)=> {

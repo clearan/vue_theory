@@ -16,8 +16,10 @@ const compileUtil = {
     },
     text(node, expr, vm) { // expr: msg
         let value;
+        console.log(expr)
         if (expr.indexOf('{{') !== -1) {
             value = expr.replace(/\{\{(.+?)\}\}/g,(...args) => { // 处理{{}} 这样的
+                console.log('匹配上的值', args[1])
                 // 绑定观察者，将来数据发生变化 触发这里的回调 进行更新
                 new Watcher(vm, args[1], (newVal)=> { // 这里太重要了。compile编译模板的时候，就会new一个watcher,将渲染函数作为回调函数以参数的形式
                     this.updater.textUpdater(node, this.getContentVal(expr, vm)) // 首次渲染，展现在页面上
@@ -39,6 +41,7 @@ const compileUtil = {
     },
     model(node, expr, vm) {
         const value = this.getVal(expr, vm)
+        console.log('创建watcher', value)
         new Watcher(vm, expr, (newVal)=> { // 这里太重要了。compile编译模板的时候，就会new一个watcher,将渲染函数作为回调函数以参数的形式
             this.updater.modelUpdater(node, newVal) // 首次渲染，展现在页面上
         })
@@ -66,6 +69,7 @@ const compileUtil = {
 }
 class Compile {
     constructor(el, vm) {
+        console.log('开始Compile模板编译')
         this.el = this.isElementNode(el) ? el : document.querySelector(el);
         this.vm = vm;
         // 1、获取文档碎片对象，放入内存中减少页面回流和重绘
